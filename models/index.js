@@ -9,11 +9,16 @@ const env = process.env.NODE_ENV || "development";
 const config = require(__dirname + "/../config/config.js")[env];
 const db = {};
 
+
 const sequelize = new Sequelize(
-  config.database,
-  config.username,
-  config.password,
-  config,
+  process.env.DEV_DB_NAME,
+  process.env.DEV_DB_USERNAME,
+  process.env.DEV_DB_PASSWORD,
+  {
+    host: process.env.DEV_DB_HOSTNAME,
+    dialect: "mysql", // coloca fixo
+    logging: process.env.DEV_DB_LOGGING === "true",
+  }
 );
 
 fs.readdirSync(__dirname)
