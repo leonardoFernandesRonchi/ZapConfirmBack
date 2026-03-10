@@ -1,32 +1,37 @@
-const { jwtVerify} = require("@helpers/jwt");
+const { jwtVerify } = require("@helpers/jwt");
 const { User } = require("@models");
-const { NotFoundError } = require("@helpers/customErrors");
 
 const verifyToken = async (req, res, next) => {
   try {
-    const { headers } = req;
-    if (!headers.authorization) return next();
+    let token = req.headers.authorization?.split(" ")[1];
 
-    const token = headers.authorization.split(" ")[1];
-    if (!token) throw new SyntaxError("Token missing or malformed");
+    if (!token && req.cookies?.token) {
+      token = req.cookies.token;
+    }
+
+    if (!token) {
+      req.loggedUser = null;
+      return next();
+    }
 
     const userVerified = await jwtVerify(token);
-    if (!userVerified) throw new Error("Invalid Token");
 
-    req.loggedUser = await User.findOne({
-      attributes: { exclude: ["email"] },
+    const user = await User.findOne({
       where: { email: userVerified.email },
+      attributes: { exclude: ["password"] },
     });
 
-    if (!req.loggedUser) return next(new NotFoundError("User"));
+    if (!user) {
+      req.loggedUser = null;
+      return next();
+    }
 
-    headers.email = userVerified.email;
-    req.loggedUser.dataValues.token = token;
-
+    req.loggedUser = user;
     next();
-  } catch (error) {
-    next(error);
+  } catch (err) {
+    req.loggedUser = null;
+    next(err);
   }
 };
 
-module.exports = {verifyToken};
+module.exports = { verifyToken };

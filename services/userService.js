@@ -6,57 +6,54 @@ const {
   AlreadyTakenError,
 } = require("../helpers/customErrors");
 
+// Cadastro
 async function signUpService({ username, email, password }) {
   if (!username) throw new FieldRequiredError(`A username`);
   if (!email) throw new FieldRequiredError(`An email`);
   if (!password) throw new FieldRequiredError(`A password`);
 
-  const userExists = await User.findOne({
-    where: { email: email },
-  });
+  const userExists = await User.findOne({ where: { email } });
   if (userExists) throw new AlreadyTakenError("Email", "try logging in");
+
   const newUser = await User.create({
-    email: email,
-    username: username,
+    email,
+    username,
     password: await bcryptHash(password),
   });
-  newUser.dataValues.token = await jwtSign({
-    id: newUser?.id,
-    email: newUser?.email,
-  });
+
+  // gera token no signup
+  const token = await jwtSign({ id: newUser.id, email: newUser.email });
+
   return {
-    id: newUser.id,
-    email: newUser.email,
-    username: newUser.username,
-    token: newUser.dataValues.token,
+    user: {
+      id: newUser.id,
+      email: newUser.email,
+      username: newUser.username,
+    },
+    token, // retorna token para controller criar cookie
   };
 }
 
+// Login
 async function signInService({ email, password }) {
   if (!email) throw new FieldRequiredError(`An email`);
   if (!password) throw new FieldRequiredError(`A password`);
 
-  const user = await User.findOne({ where: { email: email } });
-
-  if (!user) {
+  const user = await User.findOne({ where: { email } });
+  if (!user) throw new Error("Invalid credentials");
+  if (!(await bcryptCompare(password, user.password)))
     throw new Error("Invalid credentials");
-  }
 
-  if (!(await bcryptCompare(password, user.password))) {
-    throw new Error("Invalid credentials");
-  }
-
-  res.cookie("token", token, {
-    httpOnly: true,
-    secure: true,
-    sameSite: "Strict",
-    maxAge: 24 * 60 * 60 * 1000,
-  });
+  // gera token no login
+  const token = await jwtSign({ id: user.id, email: user.email });
 
   return {
-    id: user?.id,
-    email: user?.email,
-    username: user?.username,
+    user: {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+    },
+    token, // retorna token para controller criar cookie HttpOnly
   };
 }
 
