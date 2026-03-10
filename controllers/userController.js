@@ -11,24 +11,35 @@ const signUp = async (req, res, next) => {
   }
 };
 
-const signIn = async (req, res, next) => {
+const signIn = async (req, res) => {
   try {
     const { email, password } = req.body;
     const { user, token } = await signInService({ email, password });
 
-    // cria cookie seguro HttpOnly
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true, // HTTPS
-      sameSite: "Strict", // evita CSRF
-      maxAge: 24 * 60 * 60 * 1000, // 1 dia
+      secure: false,
+      sameSite: "lax",
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
-    // retorna apenas os dados do usuário
-    res.status(200).json({ user: user, token: token });
+    res.status(200).json({ user, token });
+  } catch (error) {
+    return res.status(401).json({ message: error.message });
+  }
+};
+
+const logOut = async (req, res, next) => {
+  try {
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "Strict",
+    });
+    res.status(200).json({ message: "Deslogado com sucesso" });
   } catch (error) {
     next(error);
   }
 };
 
-module.exports = { signUp, signIn };
+module.exports = { signUp, signIn, logOut };
