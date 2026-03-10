@@ -1,5 +1,5 @@
 require("dotenv").config();
-require('module-alias/register');
+require("module-alias/register");
 const env = process.env.NODE_ENV || "development";
 const PORT = process.env.PORT || 3001;
 const express = require("express");
@@ -7,9 +7,10 @@ const { sequelize } = require("./models");
 const usersRoutes = require("./routes/users");
 const customersRoutes = require("@routes/customers");
 
-
+const cors = require("cors");
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 const errorHandler = (err, req, res, next) => {
   console.error(err);
