@@ -42,4 +42,12 @@ const logOut = async (req, res, next) => {
   }
 };
 
-module.exports = { signUp, signIn, logOut };
+const me = async (req, res) => {
+  try {
+    res.status(200).json({ user: req.loggedUser });
+  } catch (error) {
+    res.status(404).json({ message: "User not found" });
+  }
+};
+
+module.exports = { signUp, signIn, logOut, me };
