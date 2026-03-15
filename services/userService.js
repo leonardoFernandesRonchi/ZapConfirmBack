@@ -13,7 +13,7 @@ async function signUpService({ username, email, password }) {
   if (!password) throw new FieldRequiredError(`A password`);
 
   const userExists = await User.findOne({ where: { email } });
-  if (userExists) throw new AlreadyTakenError("Email", "try logging in");
+  if (userExists) throw new AlreadyTakenError("Email");
 
   const newUser = await User.create({
     email,

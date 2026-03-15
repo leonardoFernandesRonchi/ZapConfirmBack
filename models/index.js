@@ -9,7 +9,6 @@ const env = process.env.NODE_ENV || "development";
 const config = require(__dirname + "/../config/config.js")[env];
 const db = {};
 
-
 const sequelize = new Sequelize(
   process.env.DEV_DB_NAME,
   process.env.DEV_DB_USERNAME,
@@ -17,8 +16,8 @@ const sequelize = new Sequelize(
   {
     host: process.env.DEV_DB_HOSTNAME,
     dialect: "mysql", // coloca fixo
-    logging: process.env.DEV_DB_LOGGING === "true",
-  }
+    logging: false,
+  },
 );
 
 fs.readdirSync(__dirname)

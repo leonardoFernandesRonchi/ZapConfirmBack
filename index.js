@@ -5,6 +5,8 @@ const PORT = process.env.PORT || 3001;
 const express = require("express");
 const { sequelize } = require("./models");
 const usersRoutes = require("./routes/users");
+const cookieParser = require("cookie-parser");
+
 const customersRoutes = require("@routes/customers");
 
 const cors = require("cors");
@@ -16,6 +18,7 @@ app.use(
     credentials: true,
   }),
 );
+app.use(cookieParser());
 
 const errorHandler = (err, req, res, next) => {
   console.error(err);

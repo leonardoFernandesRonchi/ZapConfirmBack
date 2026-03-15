@@ -1,7 +1,6 @@
 /** @type {import('sequelize').Options} */
 
-require('dotenv').config();
-
+require("dotenv").config();
 
 module.exports = {
   development: {
@@ -9,8 +8,8 @@ module.exports = {
     password: process.env.DEV_DB_PASSWORD,
     database: process.env.DEV_DB_NAME,
     host: process.env.DEV_DB_HOSTNAME,
-    dialect: process.env.DEV_DB_DIALECT || 'mysql',
-    logging: console.log,
+    dialect: process.env.DEV_DB_DIALECT || "mysql",
+    logging: false,
   },
   test: {
     username: process.env.TEST_DB_USERNAME,

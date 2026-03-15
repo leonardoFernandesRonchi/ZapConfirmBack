@@ -7,17 +7,17 @@ class MyError extends Error {
 
 class ForbiddenError extends MyError {
   constructor(message) {
-    super(`You are not the author of this ${message}`);
+    super(`Você não têm permissão para acessar este recurso ${message}`);
   }
 }
 class NotFoundError extends MyError {
   constructor(property, message = "") {
-    super(`${property} not found ${message}`);
+    super(`${property} não encontrado ${message}`);
   }
 }
 class UnauthorizedError extends MyError {
   constructor() {
-    super("You need to login first!");
+    super("Você precisa estar logado para acessar este recurso");
   }
 }
 
@@ -25,13 +25,13 @@ class ValidationError extends MyError {}
 
 class FieldRequiredError extends ValidationError {
   constructor(field) {
-    super(`${field} is required`);
+    super(`${field} é obrigatório!`);
   }
 }
 
 class AlreadyTakenError extends ValidationError {
   constructor(property, message = "") {
-    super(`${property} already exists.. ${message}`);
+    super(`${property} já está sendo usado ${message}`);
   }
 }
 
