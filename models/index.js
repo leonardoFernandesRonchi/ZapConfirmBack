@@ -15,7 +15,7 @@ const sequelize = new Sequelize(
   process.env.DEV_DB_PASSWORD,
   {
     host: process.env.DEV_DB_HOSTNAME,
-    dialect: "mysql", // coloca fixo
+    dialect: "postgres",
     logging: false,
   },
 );

@@ -1,0 +1,9 @@
+services:
+  backend:
+    restart: always
+    ports:
+      - "3000:3000"
+    command: node dist/index.js
+
+  postgres:
+    restart: always

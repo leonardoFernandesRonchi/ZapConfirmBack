@@ -8,7 +8,7 @@ module.exports = {
     password: process.env.DEV_DB_PASSWORD,
     database: process.env.DEV_DB_NAME,
     host: process.env.DEV_DB_HOSTNAME,
-    dialect: process.env.DEV_DB_DIALECT || "mysql",
+    dialect: process.env.DEV_DB_DIALECT || "postgres",
     logging: false,
   },
   test: {
