@@ -14,8 +14,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Build da imagem
-        run: docker build -t backend:latest .
+      - name: Login no Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Definir repo e tag
         id: vars
@@ -32,6 +32,7 @@ jobs:
             echo "repo=${{ secrets.DOCKER_USERNAME }}/backend" >> $GITHUB_OUTPUT
             echo "tag=pr" >> $GITHUB_OUTPUT
           fi
+
       - name: Build imagem final
         run: docker build -t ${{ steps.vars.outputs.repo }}:${{ steps.vars.outputs.tag }} .
 
