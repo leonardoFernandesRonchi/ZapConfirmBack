@@ -4,10 +4,9 @@ on:
   push:
     branches: [main, dev]
   pull_request:
-    branches: [main, dev]
 
 jobs:
-  build0test:
+  build-test:
     runs-on: ubuntu-latest
 
     steps:
