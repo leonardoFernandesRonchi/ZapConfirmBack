@@ -26,6 +26,7 @@ const update = async (req, res, next) => {
     const { name, phone, email } = req.body;
     const { loggedUser } = req;
     const { customerId } = req.params;
+
     const updatedCustomer = await updateCustomer({
       name,
       phone,
@@ -44,7 +45,7 @@ const destroy = async (req, res, next) => {
     const { loggedUser } = req;
     const { customerId } = req.params;
     await deleteCustomer({ customerId, loggedUser });
-    res.status(204).json({ message: "Customer deleted" });
+    res.status(204).json({ message: "Cliente excluído com sucesso" });
   } catch (error) {
     next(error);
   }

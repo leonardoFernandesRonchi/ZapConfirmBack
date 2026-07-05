@@ -5,7 +5,7 @@ const signUp = async (req, res, next) => {
     const { username, email, password } = req.body;
     await signUpService({ username, email, password });
 
-    res.status(201).json({ message: "User created successfully" });
+    res.status(201).json({ message: "Usuário criado com sucesso" });
   } catch (error) {
     next(error);
   }
@@ -46,7 +46,7 @@ const me = async (req, res) => {
   try {
     res.status(200).json({ user: req.loggedUser });
   } catch (error) {
-    res.status(404).json({ message: "User not found" });
+    res.status(404).json({ message: "Usuário não encontrado" });
   }
 };
 

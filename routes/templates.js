@@ -1,16 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const { verifyToken } = require("@middlewares/authentication");
-const {
-  create,
-  update,
-  destroy,
-  index,
-} = require("@controllers/customerController");
+
+const { create, index, destroy } = require("@controllers/templateController");
 
 router.post("/", verifyToken, create);
-router.put("/:customerId", verifyToken, update);
-router.delete("/:customerId", verifyToken, destroy);
 router.get("/", verifyToken, index);
+router.delete("/:templateId", verifyToken, destroy);
 
 module.exports = router;
