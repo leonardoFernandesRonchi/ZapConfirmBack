@@ -2,7 +2,7 @@ const {
   createVariable,
   updateVariable,
   deleteVariable,
-  getAllVariables,
+  getVariables,
 } = require("../services/variableService");
 
 async function create(req, res, next) {
@@ -50,7 +50,7 @@ async function index(req, res, next) {
   try {
     const { loggedUser } = req;
 
-    const variables = await getAllVariables({ loggedUser });
+    const variables = await getVariables({ loggedUser });
     res.status(200).json(variables);
   } catch (error) {
     next(error);

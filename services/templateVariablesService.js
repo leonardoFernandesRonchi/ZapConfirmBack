@@ -6,36 +6,26 @@ const {
 } = require("@helpers/customErrors");
 
 async function createTemplateVariable({ variableId, templateId, loggedUser }) {
-  const userTemplateVariable = await TemplateVariable.findOne({
+  const templateVariableExists = await TemplateVariable.scope({
+    method: ["withOwner", loggedUser.id],
+  }).findOne({
     where: {
-      userId: loggedUser.id,
       templateId: templateId,
+      variableId: variableId,
     },
   });
 
-  const template = await TemplateVariable.findOne({
-    where: {
-      id: templateId,
-      userId: loggedUser.id,
-    },
-  });
-
-  if (!template) {
-    throw new FieldRequiredError(
-      "Template não existe ou não pertence ao usuário",
-    );
-  }
-  if (userTemplateVariable) {
+  if (templateVariableExists) {
     throw new AlreadyTakenError("TemplateVariable", "try updating it instead");
   }
   if (!variableId) throw new FieldRequiredError("VariableId");
   if (!templateId) throw new FieldRequiredError("TemplateId");
 
-  const templateVariable = await TemplateVariable.create({
+  const newTemplateVariable = await TemplateVariable.create({
     variableId: variableId,
     templateId: templateId,
   });
-  return templateVariable;
+  return newTemplateVariable;
 }
 
 async function deleteTemplateVariable({ templateVariableId, loggedUser }) {
@@ -49,7 +39,7 @@ async function deleteTemplateVariable({ templateVariableId, loggedUser }) {
       "TemplateVariable não existe ou não pertence ao usuário",
     );
   }
-  await TemplateVariable.destroy();
+  await record.destroy();
 }
 
 async function indexTemplateVariables({ templateId, loggedUser }) {

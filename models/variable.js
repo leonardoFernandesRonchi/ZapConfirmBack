@@ -5,6 +5,7 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Variable extends Model {
     static associate(models) {
+      this.belongsTo(models.User, { foreignKey: "userId" });
       this.belongsToMany(models.Template, {
         through: models.TemplateVariable,
         foreignKey: "variableId",
@@ -14,6 +15,15 @@ module.exports = (sequelize, DataTypes) => {
 
   Variable.init(
     {
+      userId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "Users",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL",
+      },
       key: {
         type: DataTypes.STRING,
         unique: true,

@@ -12,6 +12,7 @@ const appointmentsRoutes = require("./routes/appointments");
 const templatesRoutes = require("./routes/templates");
 const templateVariablesRoutes = require("./routes/templateVariables");
 const templateVersionsRoutes = require("./routes/templateVersions");
+const variablesRoutes = require("./routes/variables");
 
 const cors = require("cors");
 const app = express();
@@ -49,6 +50,7 @@ app.use("/api/customers", customersRoutes);
 app.use("/api/templates", templatesRoutes);
 app.use("/api", templateVariablesRoutes);
 app.use("/api", templateVersionsRoutes);
+app.use("/api", variablesRoutes);
 app.use(errorHandler);
 
 app.listen(PORT, "0.0.0.0", () =>

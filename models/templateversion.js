@@ -9,6 +9,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       this.belongsTo(models.Template, { foreignKey: "templateId" });
+      this.hasMany(models.Message, { foreignKey: "templateVersionId" });
+      this.hasMany(models.MessageJob, { foreignKey: "templateVersionId" });
     }
   }
   TemplateVersion.init(

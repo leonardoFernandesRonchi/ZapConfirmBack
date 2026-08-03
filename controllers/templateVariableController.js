@@ -3,7 +3,7 @@ const {
   deleteTemplateVariable,
   indexTemplateVariables,
   findTemplateVariableById,
-} = require("@/services/templateVariablesService");
+} = require("../services/templateVariablesService");
 
 const create = async (req, res, next) => {
   try {
